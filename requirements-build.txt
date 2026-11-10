@@ -1,0 +1,9 @@
+# 仅在「构建 EXE / 生成图标 / 创建快捷方式」时需要。
+# 程序运行本身只依赖 Python 标准库（urllib / http.server / tkinter / ctypes 等）。
+#
+# 重要：Python 必须是带 tkinter + Tcl/Tk 的完整安装包（官方 Windows 安装程序，
+# 安装时勾选 tcl/tk）。精简版与 embeddable 版不含 tkinter，无法打包窗口程序。
+
+pyinstaller>=6.0
+Pillow>=10.0
+pywin32>=300; sys_platform == "win32"
