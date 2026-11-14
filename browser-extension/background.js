@@ -1,20 +1,30 @@
 const IMG_LIKE = /\.(?:jpe?g|png|gif|webp|avif|bmp|ico|svg|apng|jxl|heic|heif|tiff?)(?:[?#]|$)/i;
 const cache = new Map();
+const bucketLoading = new Map();
 const timers = new Map();
+const tabUrls = new Map();
 const MAX_PER_TAB = 4000;
 
 const skey = (tabId) => 'netimg_' + tabId;
 
 async function bucket(tabId) {
-  if (!cache.has(tabId)) {
+  if (cache.has(tabId)) return cache.get(tabId);
+  if (bucketLoading.has(tabId)) return bucketLoading.get(tabId);
+
+  const promise = (async () => {
     let arr = [];
     try {
       const got = await chrome.storage.session.get(skey(tabId));
       if (Array.isArray(got[skey(tabId)])) arr = got[skey(tabId)];
     } catch (e) {}
-    cache.set(tabId, new Map(arr.map((x) => [x.url, x])));
-  }
-  return cache.get(tabId);
+    const m = new Map(arr.map((x) => [x.url, x]));
+    cache.set(tabId, m);
+    bucketLoading.delete(tabId);
+    return m;
+  })();
+
+  bucketLoading.set(tabId, promise);
+  return promise;
 }
 
 function persist(tabId) {
@@ -28,6 +38,17 @@ function persist(tabId) {
   }, 500));
 }
 
+async function clearTabBucket(tabId) {
+  if (timers.has(tabId)) {
+    clearTimeout(timers.get(tabId));
+    timers.delete(tabId);
+  }
+  cache.set(tabId, new Map());
+  try {
+    await chrome.storage.session.remove(skey(tabId));
+  } catch (e) {}
+}
+
 function arrayToB64(ab) {
   const bytes = new Uint8Array(ab);
   const CH = 0x8000;
@@ -38,6 +59,17 @@ function arrayToB64(ab) {
   return btoa(s);
 }
 
+// 顶层页面跳转（非仅 hash 变化）时自动清空旧页面的网络图片记录
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (!changeInfo.url) return;
+  const newBase = changeInfo.url.split('#')[0];
+  const oldBase = tabUrls.get(tabId);
+  if (oldBase && oldBase !== newBase) {
+    clearTabBucket(tabId);
+  }
+  tabUrls.set(tabId, newBase);
+});
+
 // 网络层：所有实际加载过的图片响应，不限格式、不依赖 DOM 结构
 chrome.webRequest.onResponseStarted.addListener(
   async (d) => {
@@ -46,9 +78,10 @@ chrome.webRequest.onResponseStarted.addListener(
     const mime = h ? String(h.value).split(';')[0].trim().toLowerCase() : '';
     const isImage = d.type === 'image' || /^image\//.test(mime) || IMG_LIKE.test(d.url.split('?')[0]);
     if (!isImage) return;
+
     const b = await bucket(d.tabId);
     if (b.has(d.url)) return;
-    b.set(d.url, { url: d.url, mime: mime, from: 'network', ts: Date.now() });
+    b.set(d.url, { url: d.url, mime, from: 'network', ts: Date.now() });
     if (b.size > MAX_PER_TAB) b.delete(b.keys().next().value);
     persist(d.tabId);
   },
@@ -63,8 +96,7 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
         const b = await bucket(msg.tabId);
         send({ ok: true, items: [...b.values()] });
       } else if (msg.type === 'clearNetwork') {
-        cache.set(msg.tabId, new Map());
-        await chrome.storage.session.remove(skey(msg.tabId));
+        await clearTabBucket(msg.tabId);
         send({ ok: true });
       } else if (msg.type === 'fetchImage') {
         const r = await fetch(msg.url, { credentials: 'include' });
@@ -89,7 +121,7 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
             results.push({ url: it.url, ok: false, error: String(e) });
           }
         }
-        send({ ok: true, results: results });
+        send({ ok: true, results });
       } else {
         send({ ok: false, error: 'unknown message type' });
       }
@@ -101,7 +133,13 @@ chrome.runtime.onMessage.addListener((msg, sender, send) => {
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {
+  if (timers.has(tabId)) {
+    clearTimeout(timers.get(tabId));
+    timers.delete(tabId);
+  }
   cache.delete(tabId);
+  bucketLoading.delete(tabId);
+  tabUrls.delete(tabId);
   try {
     const p = chrome.storage.session.remove(skey(tabId));
     if (p && typeof p.catch === 'function') p.catch(() => {});

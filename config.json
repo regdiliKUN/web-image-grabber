@@ -1,0 +1,11 @@
+{
+  "css": true,
+  "upscale": true,
+  "unknown": false,
+  "ignore_ssl": false,
+  "min_w": "0",
+  "workers": "6",
+  "timeout": "20",
+  "cookie": "",
+  "save_dir": "D:\\Desktop\\暂存"
+}

@@ -1,29 +1,13 @@
-# Python
+_internal/
+下载图片/
+*.exe
+*.7z
+*.zip
 __pycache__/
-*.py[cod]
-*.pyo
-.venv/
-venv/
-
-# 构建产物与二进制包
+*.pyc
 build/
 dist/
 *.spec
-_internal/
-*.exe
-*.zip
-*.7z
-*.lnk
-
-# 本机配置、输出与日志
-config.json
 error.log
-*.log
-下载图片/
-
-# 编辑器 / 系统 / 工作区数据
-.vscode/
-.idea/
-.workbuddy/
 .DS_Store
 Thumbs.db

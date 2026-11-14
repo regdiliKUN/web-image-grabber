@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "网页图片全能抓取器",
-  "version": "1.0.0",
-  "description": "抓取当前网页上任意格式的图片（含懒加载、CSS 背景、srcset、动态加载、内联图），保存到你指定的本地文件夹。",
+  "version": "1.1.0",
+  "description": "三层扫描当前网页任意格式图片（含懒加载、CSS 背景、srcset、动态加载、内联图），支持智能原图还原、预览筛选与本地保存。",
   "permissions": [
     "activeTab",
     "scripting",

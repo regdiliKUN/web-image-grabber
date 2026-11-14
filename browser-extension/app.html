@@ -7,74 +7,99 @@
 :root{--bg:#16181d;--panel:#202329;--panel2:#272b32;--line:#343a43;--fg:#e8eaed;--mut:#9aa3af;--acc:#4c9aff;--ok:#4ec9a0;--err:#f2777a;--warn:#e5c07b}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
-.wrap{max-width:1180px;margin:0 auto;padding:20px 22px 60px}
-header{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 22px 64px}
+header{display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
 h1{font-size:18px;font-weight:500;margin:0}
 .sub{color:var(--mut);font-size:12px;margin:0}
-h2{font-size:13px;font-weight:500;margin:0 0 10px;color:var(--fg)}
+.desk-badge{margin-left:auto;font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--mut);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.desk-badge.on{border-color:rgba(78,201,160,.45);color:var(--ok)}
+.desk-badge.off{border-color:rgba(229,192,123,.35);color:var(--warn)}
+.desk-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+h2{font-size:13px;font-weight:500;margin:0 0 10px;color:var(--fg);display:flex;align-items:center}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px}
 .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:9px}
 .row:last-child{margin-bottom:0}
 .lbl{color:var(--mut);font-size:12px;white-space:nowrap}
 .hint{color:var(--mut);font-size:12px;line-height:1.55;margin-top:8px;border-left:2px solid var(--line);padding-left:10px}
-button{background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:7px 13px;font-size:12px;cursor:pointer;font-family:inherit}
-button:hover{border-color:var(--acc)}
+button{background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:7px 13px;font-size:12px;cursor:pointer;font-family:inherit;transition:border-color .12s,background .12s}
+button:hover:not(:disabled){border-color:var(--acc)}
 button:disabled{opacity:.45;cursor:not-allowed}
 button.primary{background:#2c5f9e;border-color:#3b76c4;color:#fff}
-button.primary:hover{background:#356fb8}
-button.big{padding:10px 22px;font-size:13px}
+button.primary:hover:not(:disabled){background:#356fb8}
+button.danger{background:#7d2e32;border-color:#a34146;color:#fff}
+button.danger:hover:not(:disabled){background:#94373c}
+button.big{padding:10px 20px;font-size:13px}
 button.ghost{background:transparent}
 select,input[type=text],input[type=number]{background:#191c21;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 9px;font-size:12px;font-family:inherit;outline:none}
 select:focus,input:focus{border-color:var(--acc)}
 #tabSel{max-width:520px;min-width:260px;flex:1}
-#subdirCustom{width:180px}
+#subdirCustom{width:170px}
 #kw{width:170px}
+input[type=number]{width:82px}
 .chk,.radio{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--fg);white-space:nowrap;cursor:pointer}
 input[type=checkbox],input[type=radio]{accent-color:var(--acc);margin:0}
 .dir{font-size:12px;color:var(--ok);word-break:break-all}
 .dir.off{color:var(--warn)}
 .stat{color:var(--mut);font-size:12px;margin-left:auto}
 .gridwrap{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;min-height:180px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.card{display:block;background:var(--panel2);border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:pointer;position:relative}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.card{display:flex;flex-direction:column;background:var(--panel2);border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative;transition:border-color .12s}
 .card.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
-.card .thumb{height:110px;background:#111318;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card.dl-ok{border-color:rgba(78,201,160,.65)}
+.card.dl-fail{border-color:rgba(242,119,122,.75)}
+.card .thumb{height:116px;background:#111318;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;position:relative}
 .card .thumb img{max-width:100%;max-height:100%;object-fit:contain}
-.card .noimg{color:#5a616d;font-size:11px}
-.card .meta{padding:6px 8px;font-size:11px;color:var(--mut);line-height:1.45}
+.card .noimg{color:#5a616d;font-size:11px;text-align:center;padding:6px}
+.card .meta{padding:6px 8px;font-size:11px;color:var(--mut);line-height:1.45;cursor:pointer;user-select:none}
 .card .meta b{color:var(--fg);font-weight:500}
 .card .meta span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .cb{position:absolute;top:6px;left:6px;width:17px;height:17px;accent-color:var(--acc);background:#000;border-radius:3px}
-.card .tag{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.72);color:#dfe6ef;font-size:10px;padding:1px 5px;border-radius:4px}
+.card .cb{position:absolute;top:6px;left:6px;width:17px;height:17px;accent-color:var(--acc);cursor:pointer;z-index:2}
+.card .tag{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.74);color:#dfe6ef;font-size:10px;padding:1px 5px;border-radius:4px;z-index:2}
+.card .badge-cand{position:absolute;bottom:4px;right:4px;background:rgba(76,154,255,.85);color:#fff;font-size:10px;padding:1px 5px;border-radius:4px}
+.card .badge-stat{position:absolute;bottom:4px;left:4px;font-size:10px;padding:1px 5px;border-radius:4px;color:#fff}
+.card .badge-stat.ok{background:rgba(78,201,160,.85);color:#0f201a}
+.card .badge-stat.fail{background:rgba(242,119,122,.88)}
 .empty{color:var(--mut);text-align:center;padding:52px 10px;font-size:12px}
-.bar{position:sticky;bottom:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:14px}
-.prog{flex:1;height:7px;background:#111318;border-radius:5px;overflow:hidden}
+.sentinel{text-align:center;padding:14px 0 4px;color:var(--mut);font-size:12px;display:none}
+.bar{position:sticky;bottom:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;z-index:10;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.prog{flex:1;min-width:140px;height:7px;background:#111318;border-radius:5px;overflow:hidden}
 #progFill{height:100%;width:0;background:var(--acc);transition:width .15s}
-#progText{font-size:12px;color:var(--mut);min-width:110px;text-align:right}
+#progText{font-size:12px;color:var(--mut);min-width:95px;text-align:right}
 .log{margin-top:12px;background:#101216;border:1px solid var(--line);border-radius:8px;padding:10px 12px;max-height:170px;overflow:auto;font:11px/1.65 Consolas,"Microsoft YaHei",monospace;color:var(--mut)}
 .log div{white-space:pre-wrap;word-break:break-all}
 .log .ok{color:var(--ok)}.log .err{color:var(--err)}.log .warn{color:var(--warn)}
 details.help{font-size:12px;color:var(--mut)}details.help summary{cursor:pointer;color:var(--fg);font-size:12px}
 details.help ul{padding-left:20px;margin:8px 0 0}details.help li{margin-bottom:5px}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.lightbox.open{display:flex}
+.lightbox img{max-width:92vw;max-height:78vh;object-fit:contain;border-radius:6px;background:#111318;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+.lightbox .lb-info{margin-top:12px;color:#dfe6ef;font-size:12px;text-align:center;max-width:90vw;word-break:break-all}
+.lightbox .lb-actions{margin-top:10px;display:flex;gap:10px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header><h1>网页图片全能抓取器</h1><p class="sub">三层扫描 · 不限图片格式 · 写入你指定的文件夹</p></header>
+  <header>
+    <h1>网页图片全能抓取器</h1>
+    <p class="sub">三层扫描 · 智能原图还原 · 分批虚拟渲染</p>
+    <span id="deskStatus" class="desk-badge off" title="点击重新检测桌面程序连接"><span class="desk-dot"></span><span id="deskText">桌面程序检测中…</span></span>
+  </header>
 
   <section class="panel">
     <div class="row">
       <span class="lbl">目标网页</span>
       <select id="tabSel"></select>
       <button id="btnRefresh" class="ghost">刷新标签列表</button>
+      <button id="btnClearNet" class="ghost" title="清空当前标签页后台记录的网络图片">清空网络缓存</button>
     </div>
     <div class="row">
       <button id="btnScan" class="primary">扫描当前页</button>
       <button id="btnDeep">刷新并完整抓取</button>
       <label class="chk"><input type="checkbox" id="autoScroll" checked> 自动滚动触发懒加载</label>
       <label class="chk"><input type="checkbox" id="upscale" checked> 尝试还原原图</label>
+      <label class="chk"><input type="checkbox" id="autoDropInvalid" checked> 自动取消无效候选</label>
     </div>
-    <div class="hint">「刷新并完整抓取」会重新载入页面并由后台记录全部图片响应，能抓到 JS 动态插入、CSS 背景、没有扩展名的图片，结果最全。普通扫描只读当前已渲染的页面DOM与已记录的网络资源。</div>
   </section>
 
   <section class="panel">
@@ -88,6 +113,12 @@ details.help ul{padding-left:20px;margin:8px 0 0}details.help li{margin-bottom:5
       <span class="lbl">写入方式</span>
       <label class="radio"><input type="radio" name="mode" value="fs" checked> 直接写入指定文件夹</label>
       <label class="radio"><input type="radio" name="mode" value="download"> 浏览器默认下载目录</label>
+      <span class="lbl" style="margin-left:8px">并发数</span>
+      <select id="concurrency">
+        <option value="3">3 线程</option>
+        <option value="6" selected>6 线程</option>
+        <option value="10">10 线程</option>
+      </select>
     </div>
     <div class="row">
       <span class="lbl">子文件夹</span>
@@ -99,11 +130,10 @@ details.help ul{padding-left:20px;margin:8px 0 0}details.help li{margin-bottom:5
       <input type="text" id="subdirCustom" placeholder="例如 素材收集">
       <label class="chk"><input type="checkbox" id="unknown"> 保留无法识别格式的资源</label>
     </div>
-    <div class="hint">出于浏览器安全限制，扩展读不到文件夹的完整盘符路径，但你用「选择文件夹」挑中的是哪个目录，图片就直接写进哪个目录（重开浏览器后只需重新授权一次）。「浏览器默认下载目录」模式只能写到下载目录下面的子文件夹，适合不支持选择文件夹的浏览器。</div>
   </section>
 
   <section class="panel">
-    <h2>筛选 <span id="stat" class="stat">共 0 张</span></h2>
+    <h2>筛选与操作 <span id="stat" class="stat">共 0 张</span></h2>
     <div class="row">
       <span class="lbl">格式</span>
       <select id="fmt">
@@ -118,14 +148,24 @@ details.help ul{padding-left:20px;margin:8px 0 0}details.help li{margin-bottom:5
       </select>
       <span class="lbl">最小宽度</span>
       <input type="number" id="minW" value="0" min="0" step="100"> px
+      <span class="lbl">最小高度</span>
+      <input type="number" id="minH" value="0" min="0" step="100"> px
+      <span class="lbl">排序</span>
+      <select id="sortBy">
+        <option value="default">默认顺序</option>
+        <option value="area_desc">分辨率从大到小</option>
+        <option value="w_desc">宽度从大到小</option>
+        <option value="fmt">按格式分组</option>
+      </select>
       <span class="lbl">URL 包含</span>
       <input type="text" id="kw" placeholder="留空不限">
       <button id="btnApply" class="ghost">应用筛选</button>
     </div>
     <div class="row">
-      <button id="btnAll" class="ghost">全选</button>
+      <button id="btnAll" class="ghost">全选当前</button>
       <button id="btnNone" class="ghost">全不选</button>
-      <button id="btnInv" class="ghost">反选</button>
+      <button id="btnInv" class="ghost">反选当前</button>
+      <button id="btnSelectBig" class="ghost" title="仅勾选当前显示且尺寸 >= 400px 的图片">只选大图(≥400px)</button>
       <button id="btnLinks" class="ghost">复制选中链接</button>
       <span id="selCount" class="stat">已选 0 张</span>
     </div>
@@ -134,31 +174,34 @@ details.help ul{padding-left:20px;margin:8px 0 0}details.help li{margin-bottom:5
   <section class="gridwrap">
     <div id="grid" class="grid"></div>
     <div id="empty" class="empty">点击「扫描当前页」或「刷新并完整抓取」开始</div>
+    <div id="loadSentinel" class="sentinel">
+      <span id="sentinelText">向下滚动自动加载更多…</span>
+      <button id="btnLoadAll" class="ghost" style="margin-left:10px">加载全部</button>
+    </div>
   </section>
 
   <footer class="bar">
     <button id="btnPush" class="primary big">发送到桌面程序</button>
     <button id="btnDownload" class="big">下载选中图片</button>
+    <button id="btnRetry" class="ghost" style="display:none">重试失败项</button>
+    <button id="btnCancel" class="danger" style="display:none">停止</button>
     <div class="prog"><div id="progFill"></div></div>
     <span id="progText">就绪</span>
   </footer>
 
   <div id="log" class="log"></div>
-
-  <details class="panel help">
-    <summary>使用说明与常见问题</summary>
-    <ul>
-      <li>安装：Chrome / Edge 打开 <b>chrome://extensions</b>（Edge 为 edge://extensions）→ 开启「开发者模式」→ 「加载已解压的扩展程序」→ 选中本文件夹。之后点工具栏图标即可打开。</li>
-      <li>配套桌面程序：先运行包体里的 <b>ImageGrabber.exe</b> 并保持窗口打开，在这里点「发送到桌面程序」，图片就由桌面程序写进它设置的本地文件夹（真实绝对路径）。需要登录、JS 渲染、懒加载的网页走这条路最省事。</li>
-      <li>抓取范围：<code>&lt;img&gt;</code>、srcset / picture、懒加载 data-* 属性、CSS 背景图与伪元素、Shadow DOM、同源 iframe、页面源码与 JSON 里的图片地址、内联 base64 图、blob 图、以及网络层所有 image/* 响应。格式不靠白名单，JPG/PNG/WebP/AVIF/GIF/SVG/BMP/ICO/APNG/JXL/HEIC 与无扩展名的动态图片都能收。</li>
-      <li>图片很多或抓不全：用「刷新并完整抓取」，并确认「自动滚动触发懒加载」已勾选。滚动只影响目标页面，结束后会滚回顶部。</li>
-      <li>部分站点有防盗链：优先在目标页面上下文取图（自动带 Cookie 和 Referer），失败会自动改用扩展请求，再失败会记在日志里。</li>
-      <li>blob: 与 data: 图片只能在「直接写入指定文件夹」模式保存，「浏览器默认下载目录」模式会跳过它们。</li>
-      <li>Firefox 不支持「选择文件夹」，请改用「浏览器默认下载目录」模式。</li>
-      <li>请遵守目标网站的条款与 robots 规则，商用前确认图片版权授权。</li>
-    </ul>
-  </details>
 </div>
+
+<div id="lightbox" class="lightbox">
+  <img id="lbImg" alt="">
+  <div id="lbInfo" class="lb-info"></div>
+  <div class="lb-actions">
+    <button id="lbToggle" class="primary">切换选中</button>
+    <button id="lbOpen">新标签打开原图</button>
+    <button id="lbClose">关闭 (ESC)</button>
+  </div>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
